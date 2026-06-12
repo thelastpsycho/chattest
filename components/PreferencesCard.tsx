@@ -10,7 +10,7 @@ interface PreferencesCardProps {
 
 export function PreferencesCard({ preferences, onUpdate, onSubmit }: PreferencesCardProps) {
   return (
-    <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-light-gray)] rounded-xl p-6 shadow-sm">
+    <div className="bg-anvaya-white border border-anvaya-light-gray rounded-xl p-6 shadow-sm">
       <h3 className="text-lg mb-4">Your Stay Preferences</h3>
 
       {/* Bedding Type */}
@@ -24,8 +24,8 @@ export function PreferencesCard({ preferences, onUpdate, onSubmit }: Preferences
               onClick={() => onUpdate({ ...preferences, bedding: option as Preferences['bedding'] })}
               className={`px-4 py-2 rounded-lg border-2 transition-all ${
                 preferences.bedding === option
-                  ? 'border-[var(--anvaya-teal)] bg-[var(--anvaya-teal)] text-white'
-                  : 'border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)]'
+                  ? 'border-anvaya-teal bg-anvaya-teal text-white'
+                  : 'border-anvaya-light-gray hover:border-anvaya-teal'
               }`}
             >
               {option}
@@ -44,7 +44,7 @@ export function PreferencesCard({ preferences, onUpdate, onSubmit }: Preferences
           placeholder="e.g. nut allergy, vegetarian, no pork"
           value={preferences.dietary}
           onChange={(e) => onUpdate({ ...preferences, dietary: e.target.value })}
-          className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)] resize-none"
+          className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal resize-none"
           rows={2}
         />
       </div>
@@ -60,8 +60,8 @@ export function PreferencesCard({ preferences, onUpdate, onSubmit }: Preferences
               onClick={() => onUpdate({ ...preferences, occasion: option, occasionOther: '' })}
               className={`px-3 py-2 rounded-lg text-sm border-2 transition-all ${
                 preferences.occasion === option
-                  ? 'border-[var(--anvaya-teal)] bg-[var(--anvaya-teal)] text-white'
-                  : 'border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)]'
+                  ? 'border-anvaya-teal bg-anvaya-teal text-white'
+                  : 'border-anvaya-light-gray hover:border-anvaya-teal'
               }`}
             >
               {option}
@@ -74,14 +74,14 @@ export function PreferencesCard({ preferences, onUpdate, onSubmit }: Preferences
             placeholder="Please specify"
             value={preferences.occasionOther || ''}
             onChange={(e) => onUpdate({ ...preferences, occasionOther: e.target.value })}
-            className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)]"
+            className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal"
           />
         )}
       </div>
 
       <button
         onClick={onSubmit}
-        className="w-full bg-[var(--anvaya-teal)] text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity"
+        className="w-full bg-anvaya-teal text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity"
       >
         Continue
       </button>

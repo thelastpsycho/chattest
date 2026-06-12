@@ -1,4 +1,4 @@
-import { LeadEmail, ServiceSelection } from './types';
+import { LeadEmail } from './types';
 import { SERVICE_CATALOG } from './catalog';
 import { formatIDR } from './money';
 

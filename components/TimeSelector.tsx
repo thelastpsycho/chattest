@@ -12,7 +12,7 @@ interface TimeSelectorProps {
 function generateTimeSlots(): string[] {
   const slots: string[] = [];
   for (let hour = 9; hour <= 21; hour++) {
-    for (let minute of [0, 30]) {
+    for (const minute of [0, 30]) {
       // Stop at 9:00 PM (21:00), don't go beyond
       if (hour === 21 && minute > 0) break;
       const hourStr = hour.toString().padStart(2, '0');
@@ -46,17 +46,17 @@ export function TimeSelector({ value, onChange, disabled }: TimeSelectorProps) {
         type="button"
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
-        className={`w-full px-3 py-2 border rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)] ${
+        className={`w-full px-3 py-2 border rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-anvaya-teal ${
           disabled
             ? 'bg-gray-100 cursor-not-allowed'
-            : 'bg-white border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)] cursor-pointer'
+            : 'bg-white border-anvaya-light-gray hover:border-anvaya-teal cursor-pointer'
         }`}
       >
         {displayValue}
       </button>
 
       {isOpen && !disabled && (
-        <div className="absolute z-10 mt-1 w-full bg-white border border-[var(--anvaya-light-gray)] rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-10 mt-1 w-full bg-white border border-anvaya-light-gray rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {timeSlots.map((time) => (
             <button
               key={time}
@@ -66,7 +66,7 @@ export function TimeSelector({ value, onChange, disabled }: TimeSelectorProps) {
                 setIsOpen(false);
               }}
               className={`w-full px-3 py-2 text-left hover:bg-[#f0fdfa] transition-colors ${
-                value === time ? 'bg-[#f0fdfa] font-medium text-[var(--anvaya-teal)]' : ''
+                value === time ? 'bg-[#f0fdfa] font-medium text-anvaya-teal' : ''
               }`}
             >
               {formatTimeDisplay(time)}

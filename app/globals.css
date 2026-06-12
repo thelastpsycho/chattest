@@ -18,6 +18,13 @@
 }
 
 @theme inline {
+  --color-anvaya-teal: #506b7b;
+  --color-anvaya-sand: #F5F1E8;
+  --color-anvaya-gold: #C9A962;
+  --color-anvaya-charcoal: #2C3E50;
+  --color-anvaya-white: #FFFFFF;
+  --color-anvaya-light-gray: #E8E4DD;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);

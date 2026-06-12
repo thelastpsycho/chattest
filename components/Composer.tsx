@@ -27,12 +27,12 @@ export function Composer({ onSend, disabled = false, placeholder = 'Type your me
         onChange={(e) => setInput(e.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 px-4 py-3 border-2 border-[var(--anvaya-light-gray)] rounded-xl focus:outline-none focus:border-[var(--anvaya-teal)] focus:ring-2 focus:ring-[var(--anvaya-teal)] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex-1 px-4 py-3 border-2 border-anvaya-light-gray rounded-xl focus:outline-none focus:border-anvaya-teal focus:ring-2 focus:ring-anvaya-teal disabled:opacity-50 disabled:cursor-not-allowed"
       />
       <button
         type="submit"
         disabled={disabled || !input.trim()}
-        className="px-6 py-3 bg-[var(--anvaya-teal)] text-white rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-6 py-3 bg-anvaya-teal text-white rounded-xl font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Send
       </button>

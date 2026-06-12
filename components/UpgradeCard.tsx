@@ -11,7 +11,7 @@ interface UpgradeCardProps {
 
 export function UpgradeCard({ upgrade, onUpdate, onSubmit }: UpgradeCardProps) {
   return (
-    <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-light-gray)] rounded-xl p-6 shadow-sm">
+    <div className="bg-anvaya-white border border-anvaya-light-gray rounded-xl p-6 shadow-sm">
       <h3 className="text-lg mb-4">Room Upgrade</h3>
 
       <div className="mb-6">
@@ -26,9 +26,9 @@ export function UpgradeCard({ upgrade, onUpdate, onSubmit }: UpgradeCardProps) {
                 onUpdate({ interested: false, targetCategory: undefined });
               }
             }}
-            className="w-5 h-5 rounded border-gray-300 text-[var(--anvaya-teal)] focus:ring-[var(--anvaya-teal)]"
+            className="w-5 h-5 rounded border-gray-300 text-anvaya-teal focus:ring-anvaya-teal"
           />
-          <span className="font-medium">I'm interested in a room upgrade</span>
+          <span className="font-medium">I&apos;m interested in a room upgrade</span>
         </label>
         <p className="text-sm text-gray-600 mt-2 ml-8">
           Our concierge will confirm availability and provide rates based on your current booking.
@@ -48,8 +48,8 @@ export function UpgradeCard({ upgrade, onUpdate, onSubmit }: UpgradeCardProps) {
                 onClick={() => onUpdate({ ...upgrade, targetCategory: category })}
                 className={`px-4 py-3 rounded-lg text-left border-2 transition-all ${
                   upgrade.targetCategory === category
-                    ? 'border-[var(--anvaya-teal)] bg-[var(--anvaya-teal)] text-white'
-                    : 'border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)]'
+                    ? 'border-anvaya-teal bg-anvaya-teal text-white'
+                    : 'border-anvaya-light-gray hover:border-anvaya-teal'
                 }`}
               >
                 <div className="font-medium">{category}</div>
@@ -62,7 +62,7 @@ export function UpgradeCard({ upgrade, onUpdate, onSubmit }: UpgradeCardProps) {
 
       <button
         onClick={onSubmit}
-        className="w-full bg-[var(--anvaya-teal)] text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity"
+        className="w-full bg-anvaya-teal text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity"
       >
         Continue
       </button>

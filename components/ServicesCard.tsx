@@ -1,7 +1,7 @@
 'use client';
 
 import { SERVICE_CATALOG, calculateLineTotal, validateServiceSelection } from '@/lib/catalog';
-import { ServiceSelection, CaptureField } from '@/lib/types';
+import { ServiceSelection } from '@/lib/types';
 import { formatIDR } from '@/lib/money';
 import { useState } from 'react';
 import { TimeSelector } from '@/components/TimeSelector';
@@ -26,7 +26,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
         const initialValues: Record<string, string | number> = {};
         catalog.captureFields.forEach(field => {
           if (field.type === 'quantity') {
-            initialValues[field.key] = (field as any).default || 1;
+            initialValues[field.key] = field.default || 1;
           } else if (field.type === 'select' && field.options && field.options.length > 0) {
             initialValues[field.key] = field.options[0]; // Default to first option
           } else {
@@ -79,7 +79,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
 
   return (
     <div className="space-y-4">
-      <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-light-gray)] rounded-xl p-6 shadow-sm">
+      <div className="bg-anvaya-white border border-anvaya-light-gray rounded-xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg">Add-On Services</h3>
@@ -93,7 +93,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="px-4 py-2 rounded-lg border border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)] transition-colors flex items-center gap-2"
+            className="px-4 py-2 rounded-lg border border-anvaya-light-gray hover:border-anvaya-teal transition-colors flex items-center gap-2"
           >
             {isExpanded ? 'Collapse' : 'Expand'}
             <span className="text-lg">{isExpanded ? '−' : '+'}</span>
@@ -111,8 +111,8 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                   key={catalog.id}
                   className={`border-2 rounded-xl p-4 transition-all ${
                     isSelected
-                      ? 'border-[var(--anvaya-teal)] bg-[#f0fdfa]'
-                      : 'border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)]'
+                      ? 'border-anvaya-teal bg-[#f0fdfa]'
+                      : 'border-anvaya-light-gray hover:border-anvaya-teal'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-3">
@@ -127,8 +127,8 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                       onClick={() => toggleService(catalog.id)}
                       className={`ml-4 px-4 py-2 rounded-lg font-medium transition-all ${
                         isSelected
-                          ? 'bg-[var(--anvaya-teal)] text-white'
-                          : 'bg-[var(--anvaya-light-gray)] hover:bg-[var(--anvaya-teal)] hover:text-white'
+                          ? 'bg-anvaya-teal text-white'
+                          : 'bg-anvaya-light-gray hover:bg-anvaya-teal hover:text-white'
                       }`}
                     >
                       {isSelected ? 'Remove' : 'Add'}
@@ -136,7 +136,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                   </div>
 
                   {isSelected && selection && (
-                    <div className="mt-4 pt-4 border-t border-[var(--anvaya-light-gray)] space-y-3">
+                    <div className="mt-4 pt-4 border-t border-anvaya-light-gray space-y-3">
                       {catalog.captureFields.map((field) => (
                         <div key={field.key}>
                           <label className="block text-sm font-medium mb-1">
@@ -156,7 +156,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                                     updateServiceValue(catalog.id, field.key, current - 1);
                                   }
                                 }}
-                                className="w-10 h-10 rounded-lg border-2 border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)] font-medium text-lg disabled:opacity-50"
+                                className="w-10 h-10 rounded-lg border-2 border-anvaya-light-gray hover:border-anvaya-teal font-medium text-lg disabled:opacity-50"
                                 disabled={(selection.values[field.key] as number) <= (field.min || 1)}
                               >
                                 −
@@ -173,7 +173,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                                     updateServiceValue(catalog.id, field.key, current + 1);
                                   }
                                 }}
-                                className="w-10 h-10 rounded-lg border-2 border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)] font-medium text-lg disabled:opacity-50"
+                                className="w-10 h-10 rounded-lg border-2 border-anvaya-light-gray hover:border-anvaya-teal font-medium text-lg disabled:opacity-50"
                                 disabled={(selection.values[field.key] as number) >= (field.max || 99)}
                               >
                                 +
@@ -185,7 +185,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                               type="date"
                               value={selection.values[field.key] as string}
                               onChange={(e) => updateServiceValue(catalog.id, field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)]"
+                              className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal"
                             />
                           )}
                           {field.type === 'time' && catalog.id === 3 && field.key === 'time' ? (
@@ -198,14 +198,14 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                               type="time"
                               value={selection.values[field.key] as string}
                               onChange={(e) => updateServiceValue(catalog.id, field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)]"
+                              className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal"
                             />
                           )}
                           {field.type === 'select' && (
                             <select
                               value={selection.values[field.key] as string}
                               onChange={(e) => updateServiceValue(catalog.id, field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)] bg-white"
+                              className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal bg-white"
                             >
                               {field.options.map((option) => (
                                 <option key={option} value={option}>
@@ -220,7 +220,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                               placeholder={field.optional ? '(optional)' : ''}
                               value={selection.values[field.key] as string}
                               onChange={(e) => updateServiceValue(catalog.id, field.key, e.target.value)}
-                              className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)]"
+                              className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal"
                             />
                           )}
                           {field.type === 'pax' && (
@@ -234,7 +234,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                                     updateServiceValue(catalog.id, field.key, current - 1);
                                   }
                                 }}
-                                className="w-10 h-10 rounded-lg border-2 border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)] font-medium text-lg disabled:opacity-50"
+                                className="w-10 h-10 rounded-lg border-2 border-anvaya-light-gray hover:border-anvaya-teal font-medium text-lg disabled:opacity-50"
                                 disabled={(selection.values[field.key] as number) <= (field.min || 1)}
                               >
                                 −
@@ -251,7 +251,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                                     updateServiceValue(catalog.id, field.key, current + 1);
                                   }
                                 }}
-                                className="w-10 h-10 rounded-lg border-2 border-[var(--anvaya-light-gray)] hover:border-[var(--anvaya-teal)] font-medium text-lg disabled:opacity-50"
+                                className="w-10 h-10 rounded-lg border-2 border-anvaya-light-gray hover:border-anvaya-teal font-medium text-lg disabled:opacity-50"
                                 disabled={(selection.values[field.key] as number) >= (field.max || 20)}
                               >
                                 +
@@ -262,7 +262,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
                       ))}
 
                       {(catalog.price || (selection.lineTotal !== undefined && selection.lineTotal > 0)) && (
-                        <div className="flex justify-between items-center pt-3 border-t border-[var(--anvaya-light-gray)]">
+                        <div className="flex justify-between items-center pt-3 border-t border-anvaya-light-gray">
                           <span className="font-medium">Line total:</span>
                           <span className="font-semibold text-lg">{formatIDR(selection.lineTotal)}</span>
                         </div>
@@ -277,7 +277,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
       </div>
 
       {/* Subtotal */}
-      <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-teal)] rounded-xl p-4 shadow-sm">
+      <div className="bg-anvaya-white border border-anvaya-teal rounded-xl p-4 shadow-sm">
         <div className="flex justify-between items-center">
           <span className="font-medium text-lg">Subtotal:</span>
           <span className="font-bold text-2xl">{formatIDR(subtotal)}</span>
@@ -299,7 +299,7 @@ export function ServicesCard({ services, onUpdate, onSubmit }: ServicesCardProps
       <button
         onClick={onSubmit}
         disabled={hasErrors}
-        className="w-full bg-[var(--anvaya-teal)] text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-anvaya-teal text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Continue
       </button>

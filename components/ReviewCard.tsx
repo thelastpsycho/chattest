@@ -23,7 +23,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
 
   return (
     <div className="space-y-4">
-      <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-light-gray)] rounded-xl p-6 shadow-sm">
+      <div className="bg-anvaya-white border border-anvaya-light-gray rounded-xl p-6 shadow-sm">
         <h3 className="text-lg mb-4">Review Your Selections</h3>
         <p className="text-sm text-gray-600 mb-6">
           Please review everything before sending. You can go back to any section to make changes.
@@ -36,7 +36,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
             <button
               type="button"
               onClick={() => onEditStep('preferences')}
-              className="text-sm text-[var(--anvaya-teal)] hover:underline"
+              className="text-sm text-anvaya-teal hover:underline"
             >
               Edit
             </button>
@@ -58,7 +58,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
             <button
               type="button"
               onClick={() => onEditStep('services')}
-              className="text-sm text-[var(--anvaya-teal)] hover:underline"
+              className="text-sm text-anvaya-teal hover:underline"
             >
               Edit
             </button>
@@ -78,7 +78,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
                   .join(' · ');
 
                 return (
-                  <div key={selection.serviceId} className="border-b border-[var(--anvaya-light-gray)] pb-2 last:border-0">
+                  <div key={selection.serviceId} className="border-b border-anvaya-light-gray pb-2 last:border-0">
                     <div className="flex justify-between items-start">
                       <div>
                         <div className="font-medium">{catalog.name}</div>
@@ -104,7 +104,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
             <button
               type="button"
               onClick={() => onEditStep('upgrade')}
-              className="text-sm text-[var(--anvaya-teal)] hover:underline"
+              className="text-sm text-anvaya-teal hover:underline"
             >
               Edit
             </button>
@@ -112,7 +112,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
           {upgrade.interested ? (
             <div className="pl-4 text-sm">
               <div className="font-medium">Interested in upgrading to:</div>
-              <div className="text-[var(--anvaya-teal)] mt-1">{upgrade.targetCategory || 'Not specified'}</div>
+              <div className="text-anvaya-teal mt-1">{upgrade.targetCategory || 'Not specified'}</div>
               <div className="text-xs text-gray-600 mt-1">Concierge to confirm availability and rate</div>
             </div>
           ) : (
@@ -121,7 +121,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
         </div>
 
         {/* Subtotal */}
-        <div className="bg-[#f0fdfa] border border-[var(--anvaya-teal)] rounded-lg p-4">
+        <div className="bg-[#f0fdfa] border border-anvaya-teal rounded-lg p-4">
           <div className="flex justify-between items-center">
             <span className="font-medium text-lg">Estimated Subtotal:</span>
             <span className="font-bold text-2xl">{formatIDR(subtotal)}</span>
@@ -135,7 +135,7 @@ export function ReviewCard({ state, onEditStep, onSubmit, isSubmitting }: Review
       <button
         onClick={onSubmit}
         disabled={isSubmitting}
-        className="w-full bg-[var(--anvaya-teal)] text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-anvaya-teal text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Sending...' : 'Confirm & Send'}
       </button>

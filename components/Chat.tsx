@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { GuestState, ChatMessage, FlowStep, Preferences, ServiceSelection, RoomUpgrade } from '@/lib/types';
+import Image from 'next/image';
+import { GuestState, ChatMessage, FlowStep, Preferences, RoomUpgrade } from '@/lib/types';
 
 // Components
 import { MessageBubble } from '@/components/MessageBubble';
@@ -16,24 +17,10 @@ export default function Chat() {
   const searchParams = useSearchParams();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Get URL params
   const name = searchParams.get('name') || '';
   const email = searchParams.get('email') || '';
+  const hasGuestInfo = Boolean(name && email);
 
-  // Show nothing if no guest info in URL
-  if (!name || !email) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--anvaya-sand)]">
-        <img
-          src="https://www.theanvayabali.com/wp-content/themes/wcl/images/logo-theanvaya.svg"
-          alt="The Anvaya Beach Resort Bali"
-          className="h-24"
-        />
-      </div>
-    );
-  }
-
-  // Initialize state from URL params
   const [state, setState] = useState<GuestState>(() => {
     return {
       name,
@@ -85,6 +72,21 @@ export default function Chat() {
       }, 500);
     }
   }, [state.step, state.name, state.transcript.length]);
+
+  if (!hasGuestInfo) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-anvaya-sand">
+        <Image
+          src="https://www.theanvayabali.com/wp-content/themes/wcl/images/logo-theanvaya.svg"
+          alt="The Anvaya Beach Resort Bali"
+          width={200}
+          height={96}
+          className="h-24 w-auto"
+          priority
+        />
+      </div>
+    );
+  }
 
   const handleSendMessage = async (content: string) => {
     const guestMessage: ChatMessage = {
@@ -241,7 +243,7 @@ export default function Chat() {
           ...prev,
           transcript: [...prev.transcript, {
             role: 'assistant',
-            content: `Thank you, ${state.name.split(' ')[0]}! Your request has been sent to our concierge team. We'll follow up shortly to confirm availability and finalize payment. Have a wonderful stay!`,
+            content: `Thank you, ${state.name.split(' ')[0]}! Your request has been sent to our concierge team. We'll follow up shortly to confirm availability and finalize payment. We are looking forward to welcoming you!`,
             timestamp: new Date().toISOString(),
           }],
         }));
@@ -255,17 +257,19 @@ export default function Chat() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--anvaya-sand)]">
+    <div className="min-h-screen flex flex-col bg-anvaya-sand">
       {/* Header */}
-      <header className="bg-[var(--anvaya-white)] border-b border-[var(--anvaya-light-gray)] py-3 px-4 shadow-sm">
+      <header className="bg-anvaya-white border-b border-anvaya-light-gray py-3 px-4 shadow-sm">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <img
+          <Image
             src="https://www.theanvayabali.com/wp-content/themes/wcl/images/logo-theanvaya.svg"
             alt="The Anvaya"
-            className="h-8"
+            width={120}
+            height={32}
+            className="h-8 w-auto"
           />
           <div className="text-right">
-            <p className="text-sm font-medium text-[var(--anvaya-teal)]">{state.name}</p>
+            <p className="text-sm font-medium text-anvaya-teal">{state.name}</p>
             <p className="text-xs text-gray-500">{state.email}</p>
           </div>
         </div>
@@ -280,7 +284,7 @@ export default function Chat() {
           ))}
           {isAiTyping && (
             <div className="flex justify-start mb-4">
-              <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-light-gray)] rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+              <div className="bg-anvaya-white border border-anvaya-light-gray rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
                 <div className="typing-indicator">
                   <span></span>
                   <span></span>
@@ -294,8 +298,8 @@ export default function Chat() {
 
         {/* Inline cards based on step */}
         {state.step === 'greeting' && showNameEmailForm && (
-          <div className="bg-[var(--anvaya-white)] border border-[var(--anvaya-light-gray)] rounded-xl p-6 shadow-sm mb-4">
-            <h3 className="text-lg mb-4">Let's get started</h3>
+          <div className="bg-anvaya-white border border-anvaya-light-gray rounded-xl p-6 shadow-sm mb-4">
+            <h3 className="text-lg mb-4">Let&apos;s get started</h3>
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-1">Your Name</label>
@@ -305,7 +309,7 @@ export default function Chat() {
                   value={nameEmailInput.name}
                   onChange={(e) => setNameEmailInput(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="Jane Doe"
-                  className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)]"
+                  className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal"
                 />
               </div>
               <div>
@@ -316,13 +320,13 @@ export default function Chat() {
                   value={nameEmailInput.email}
                   onChange={(e) => setNameEmailInput(prev => ({ ...prev, email: e.target.value }))}
                   placeholder="jane@example.com"
-                  className="w-full px-3 py-2 border border-[var(--anvaya-light-gray)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--anvaya-teal)]"
+                  className="w-full px-3 py-2 border border-anvaya-light-gray rounded-lg focus:outline-none focus:ring-2 focus:ring-anvaya-teal"
                 />
               </div>
               <button
                 onClick={handleNameEmailSubmit}
                 disabled={!nameEmailInput.name.trim() || !nameEmailInput.email.trim()}
-                className="w-full bg-[var(--anvaya-teal)] text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-anvaya-teal text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Start Chat
               </button>
@@ -372,9 +376,9 @@ export default function Chat() {
         )}
 
         {state.step === 'submitted' && (
-          <div className="bg-[var(--anvaya-white)] border-2 border-[var(--anvaya-teal)] rounded-xl p-6 shadow-sm text-center">
+          <div className="bg-anvaya-white border-2 border-anvaya-teal rounded-xl p-6 shadow-sm text-center">
             <div className="text-4xl mb-4">✨</div>
-            <h3 className="text-xl font-semibold text-[var(--anvaya-teal)] mb-2">Request Sent!</h3>
+            <h3 className="text-xl font-semibold text-anvaya-teal mb-2">Request Sent!</h3>
             <p className="text-gray-600">
               Our concierge team will follow up shortly to confirm your selections and finalize payment.
             </p>
@@ -387,7 +391,7 @@ export default function Chat() {
 
       {/* Composer - always available for free-text */}
       {state.step !== 'submitted' && (
-        <div className="fixed bottom-0 left-0 right-0 bg-[var(--anvaya-white)] border-t border-[var(--anvaya-light-gray)] p-4 shadow-lg">
+        <div className="fixed bottom-0 left-0 right-0 bg-anvaya-white border-t border-anvaya-light-gray p-4 shadow-lg">
           <div className="max-w-2xl mx-auto">
             <Composer
               onSend={handleSendMessage}
