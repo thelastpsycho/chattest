@@ -39,6 +39,7 @@ export default function Chat() {
   });
 
   const [isAiTyping, setIsAiTyping] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showNameEmailForm, setShowNameEmailForm] = useState(!state.name || !state.email);
   const [nameEmailInput, setNameEmailInput] = useState({ name: state.name, email: state.email });
 
@@ -206,6 +207,7 @@ export default function Chat() {
   };
 
   const handleFinalSubmit = async () => {
+    setIsSubmitting(true);
     try {
       const response = await fetch('/api/submit', {
         method: 'POST',
@@ -213,7 +215,10 @@ export default function Chat() {
         body: JSON.stringify(state),
       });
 
-      if (!response.ok) throw new Error('Failed to submit');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit');
+      }
 
       setState(prev => ({ ...prev, step: 'submitted' }));
 
@@ -229,7 +234,9 @@ export default function Chat() {
       }, 500);
     } catch (error) {
       console.error('Submit error:', error);
-      alert('There was an error sending your request. Please try again.');
+      alert(`There was an error sending your request: ${error instanceof Error ? error.message : 'Please try again.'}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -338,7 +345,7 @@ export default function Chat() {
               state={state}
               onEditStep={handleEditStep}
               onSubmit={handleFinalSubmit}
-              isSubmitting={false}
+              isSubmitting={isSubmitting}
             />
           </div>
         )}
