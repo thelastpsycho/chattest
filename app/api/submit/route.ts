@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
 
     console.log('=== SUBMIT REQUEST START ===');
     console.log('Guest:', state.name, state.email);
+    console.log('Skip SMTP:', process.env.SKIP_SMTP === 'true');
     console.log('Has SMTP credentials:', !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS));
     console.log('SMTP Host:', process.env.SMTP_HOST, 'Port:', process.env.SMTP_PORT);
 
@@ -56,6 +57,14 @@ export async function POST(request: NextRequest) {
     };
 
     const htmlBody = buildLeadEmail(leadEmail);
+
+    // Test mode: skip email sending
+    if (process.env.SKIP_SMTP === 'true') {
+      console.log('⚠️ SKIP_SMTP=true - Email would be sent to:', process.env.LEAD_EMAIL);
+      console.log('📧 Email content (first 500 chars):', htmlBody.substring(0, 500) + '...');
+      console.log('=== SUBMIT SUCCESS (TEST MODE) ===');
+      return NextResponse.json({ success: true, testMode: true });
+    }
 
     // Send email
     const transporter = createTransporter();
