@@ -31,7 +31,10 @@ export async function POST(request: NextRequest) {
   try {
     const state: GuestState = await request.json();
 
-    console.log('Submit request received for:', state.name, state.email);
+    console.log('=== SUBMIT REQUEST START ===');
+    console.log('Guest:', state.name, state.email);
+    console.log('Has SMTP credentials:', !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS));
+    console.log('SMTP Host:', process.env.SMTP_HOST, 'Port:', process.env.SMTP_PORT);
 
     // Calculate subtotal
     const subtotal = state.services
@@ -59,36 +62,52 @@ export async function POST(request: NextRequest) {
     const leadEmailAddr = process.env.LEAD_EMAIL || 'reservations@anvayabali.com';
     const fromEmail = process.env.SMTP_FROM || 'concierge@anvayabali.com';
 
-    console.log('Sending email to:', leadEmailAddr, 'from:', fromEmail);
+    console.log('Attempting to send email to:', leadEmailAddr);
 
-    await transporter.sendMail({
-      from: fromEmail,
-      to: leadEmailAddr,
-      subject: `New pre-arrival request — ${state.name}`,
-      html: htmlBody,
-    });
+    // Send email with timeout
+    await Promise.race([
+      transporter.sendMail({
+        from: fromEmail,
+        to: leadEmailAddr,
+        subject: `New pre-arrival request — ${state.name}`,
+        html: htmlBody,
+      }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Email timeout after 15 seconds')), 15000)
+      ),
+    ]);
 
-    console.log('Email sent successfully');
+    console.log('✓ Email sent successfully');
+    console.log('=== SUBMIT REQUEST END ===');
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Submit error details:', error);
+    console.error('=== SUBMIT ERROR ===');
+    console.error('Error type:', error instanceof Error ? error.constructor.name : typeof error);
+    console.error('Error message:', error instanceof Error ? error.message : String(error));
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+    console.error('=== END SUBMIT ERROR ===');
 
     // Provide more specific error message
     let errorMessage = 'Failed to send email';
     if (error instanceof Error) {
-      if (error.message.includes('ETIMEDOUT')) {
-        errorMessage = 'Connection timeout - check SMTP host and port';
+      if (error.message.includes('ETIMEDOUT') || error.message.includes('timeout')) {
+        errorMessage = 'Connection timeout - SMTP server not responding';
       } else if (error.message.includes('EAUTH')) {
         errorMessage = 'Authentication failed - check SMTP credentials';
       } else if (error.message.includes('ECONNREFUSED')) {
         errorMessage = 'Connection refused - SMTP server not reachable';
+      } else if (error.message.includes('ENOTFOUND')) {
+        errorMessage = 'SMTP host not found - check SMTP_HOST';
       }
     }
 
     return NextResponse.json(
-      { error: errorMessage, details: error instanceof Error ? error.message : 'Unknown error' },
+      {
+        error: errorMessage,
+        details: error instanceof Error ? error.message : 'Unknown error',
+        type: error instanceof Error ? error.constructor.name : typeof error
+      },
       { status: 500 }
     );
   }
