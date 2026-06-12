@@ -43,12 +43,11 @@ export const SERVICE_CATALOG: ServiceCatalog[] = [
   },
   {
     id: 5,
-    name: 'Sunset Cocktails',
+    name: 'Sunset Cocktails (5-7 PM)',
     price: 200000,
     captureFields: [
-      { type: 'quantity', label: 'Number of hours', key: 'hours', min: 1, max: 4, default: 1 },
+      { type: 'quantity', label: 'Number of guests', key: 'pax', min: 1, max: 20, default: 2 },
       { type: 'date', label: 'Date', key: 'date' },
-      { type: 'quantity', label: 'Number of guests (optional)', key: 'pax', min: 1, max: 20, default: 2, optional: true },
     ],
   },
   {
@@ -62,9 +61,18 @@ export const SERVICE_CATALOG: ServiceCatalog[] = [
   {
     id: 7,
     name: 'Gourmet Savings Deal',
-    price: 800000,
+    price: null, // Price depends on voucher option
     captureFields: [
-      { type: 'quantity', label: 'Quantity', key: 'qty', min: 1, max: 10, default: 1 },
+      {
+        type: 'select',
+        label: 'Voucher option',
+        key: 'option',
+        options: [
+          'GSD #1 — Value IDR 2,000,000 (pay IDR 1,700,000)',
+          'GSD #2 — Value IDR 5,000,000 (pay IDR 4,000,000)',
+        ]
+      },
+      { type: 'quantity', label: 'Number of vouchers', key: 'qty', min: 1, max: 10, default: 1 },
     ],
   },
   {
@@ -90,7 +98,16 @@ export const ROOM_UPGRADE_CATEGORIES = [
 // Calculate line total for a service selection
 export function calculateLineTotal(serviceId: number, values: Record<string, string | number>): number {
   const service = SERVICE_CATALOG.find(s => s.id === serviceId);
-  if (!service || service.price === null) return 0;
+  if (!service) return 0;
+
+  if (serviceId === 7) {
+    // Gourmet Savings: special handling
+    const option = values.option as string;
+    const unitPrice = option?.includes('GSD #1') ? 1700000 : 4000000;
+    return unitPrice * ((values.qty as number) || 1);
+  }
+
+  if (service.price === null) return 0;
 
   const price = service.price;
 
@@ -112,11 +129,13 @@ export function calculateLineTotal(serviceId: number, values: Record<string, str
     case 4: // Romantic Dinner: 1.5M × couples
       return price * ((values.couples as number) || 1);
 
-    case 5: // Sunset Cocktails: 200k × hours
-      return price * ((values.hours as number) || 1);
+    case 5: // Sunset Cocktails: 200k × pax (fixed 1 hour)
+      return price * ((values.pax as number) || 1);
 
-    case 7: // Gourmet Savings: 800k × qty
-      return price * ((values.qty as number) || 1);
+    case 7: // Gourmet Savings: depends on option
+      const option = values.option as string;
+      const unitPrice = option?.includes('GSD #1') ? 1700000 : 4000000;
+      return unitPrice * ((values.qty as number) || 1);
 
     case 8: // Cooking Class: 400k × pax
       return price * ((values.pax as number) || 1);

@@ -16,15 +16,29 @@ export default function Chat() {
   const searchParams = useSearchParams();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Get URL params
+  const name = searchParams.get('name') || '';
+  const email = searchParams.get('email') || '';
+
+  // Show nothing if no guest info in URL
+  if (!name || !email) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--anvaya-sand)]">
+        <img
+          src="https://www.theanvayabali.com/wp-content/themes/wcl/images/logo-theanvaya.svg"
+          alt="The Anvaya Beach Resort Bali"
+          className="h-24"
+        />
+      </div>
+    );
+  }
+
   // Initialize state from URL params
   const [state, setState] = useState<GuestState>(() => {
-    const name = searchParams.get('name') || '';
-    const email = searchParams.get('email') || '';
-
     return {
       name,
       email,
-      step: name && email ? 'preferences' : 'greeting',
+      step: 'preferences',
       preferences: {
         bedding: 'No preference',
         dietary: '',
@@ -243,10 +257,17 @@ export default function Chat() {
   return (
     <div className="min-h-screen flex flex-col bg-[var(--anvaya-sand)]">
       {/* Header */}
-      <header className="bg-[var(--anvaya-white)] border-b border-[var(--anvaya-light-gray)] py-4 px-6 shadow-sm">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-xl font-semibold text-[var(--anvaya-teal)]">The Anvaya Concierge</h1>
-          <p className="text-sm text-gray-600">Pre-Arrival Chat</p>
+      <header className="bg-[var(--anvaya-white)] border-b border-[var(--anvaya-light-gray)] py-3 px-4 shadow-sm">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <img
+            src="https://www.theanvayabali.com/wp-content/themes/wcl/images/logo-theanvaya.svg"
+            alt="The Anvaya"
+            className="h-8"
+          />
+          <div className="text-right">
+            <p className="text-sm font-medium text-[var(--anvaya-teal)]">{state.name}</p>
+            <p className="text-xs text-gray-500">{state.email}</p>
+          </div>
         </div>
       </header>
 
